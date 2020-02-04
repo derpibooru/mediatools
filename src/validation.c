@@ -45,7 +45,7 @@ int mediatools_validate_video(AVFormatContext *format)
     if (strstr(iformat->name, "matroska")) {
         switch (vpar->codec_id) {
         default:
-            printf("Bad video codec for WebM container (must be VP8, or VP9)\n");
+            printf("Bad video codec for WebM container (must be VP8 or VP9)\n");
             return false;
         case AV_CODEC_ID_VP8:
         case AV_CODEC_ID_VP9:
@@ -67,13 +67,13 @@ int mediatools_validate_video(AVFormatContext *format)
         return false;
     }
 
-    if (vpar->width < 32 || vpar->width > 4096) {
-        printf("Bad width %d (must be 32..4096)\n", vpar->width);
+    if (vpar->width < 2 || vpar->width > 4096) {
+        printf("Bad width %d (must be 2..4096)\n", vpar->width);
         return false;
     }
 
-    if (vpar->height < 32 || vpar->height > 4096) {
-        printf("Bad height %d (must be 32..4096)\n", vpar->height);
+    if (vpar->height < 2 || vpar->height > 4096) {
+        printf("Bad height %d (must be 2..4096)\n", vpar->height);
         return false;
     }
 
