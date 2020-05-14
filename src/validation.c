@@ -62,6 +62,14 @@ int mediatools_validate_video(AVFormatContext *format)
                 ;
             }
         }
+    } else if (strstr(iformat->name, "gif")) {
+        switch (vpar->codec_id) {
+        default:
+            printf("Bad video codec for GIF container (must be GIF)\n");
+            return false;
+        case AV_CODEC_ID_GIF:
+            ;
+        }
     } else {
         printf("Unknown input format\n");
         return false;

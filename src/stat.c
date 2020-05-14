@@ -35,16 +35,14 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    if (av_seek_frame(format, -1, 0, AVSEEK_FLAG_BACKWARD) != 0) {
-        printf("Couldn't read file\n");
-        return -1;
-    }
-
     int vstream_idx = av_find_best_stream(format, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
     if (vstream_idx < 0) {
         printf("Couldn't read file\n");
         return -1;
     }
+
+    // Best effort attempt to seek to beginning of file
+    av_seek_frame(format, -1, 0, AVSEEK_FLAG_BACKWARD);
 
     uint64_t frames = 0;
     int64_t last_pts = 0;
