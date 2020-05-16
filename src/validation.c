@@ -100,13 +100,13 @@ int mediatools_validate_video(AVFormatContext *format)
         return false;
     }
 
-    if (vpar->width < 1 || vpar->width > 4096) {
-        printf("Bad width %d (must be 1..4096)\n", vpar->width);
+    if (vpar->width < 1 || vpar->width > 32767) {
+        printf("Bad width %d (must be 1..32767)\n", vpar->width);
         return false;
     }
 
-    if (vpar->height < 1 || vpar->height > 4096) {
-        printf("Bad height %d (must be 1..4096)\n", vpar->height);
+    if (vpar->height < 1 || vpar->height > 32767) {
+        printf("Bad height %d (must be 1..32767)\n", vpar->height);
         return false;
     }
 
