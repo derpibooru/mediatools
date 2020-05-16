@@ -70,10 +70,10 @@ int mediatools_validate_video(AVFormatContext *format)
         case AV_CODEC_ID_GIF:
             ;
         }
-    } else if (strcmp(iformat->name, "image2") == 0) {
+    } else if (strcmp(iformat->name, "image2") == 0 || strcmp(iformat->name, "jpeg_pipe") == 0) {
         switch (vpar->codec_id) {
         default:
-            printf("Bad video codec for image2 container (must be JPEG)\n");
+            printf("Bad video codec for JPEG container (must be JPEG)\n");
             return false;
         case AV_CODEC_ID_MJPEG:
             ;
@@ -100,13 +100,13 @@ int mediatools_validate_video(AVFormatContext *format)
         return false;
     }
 
-    if (vpar->width < 1 || vpar->width > 32767) {
-        printf("Bad width %d (must be 1..32767)\n", vpar->width);
+    if (vpar->width < 1 || vpar->width > 16255) {
+        printf("Invalid width %d (must be 1..16255)\n", vpar->width);
         return false;
     }
 
-    if (vpar->height < 1 || vpar->height > 32767) {
-        printf("Bad height %d (must be 1..32767)\n", vpar->height);
+    if (vpar->height < 1 || vpar->height > 16255) {
+        printf("Invalid height %d (must be 1..16255)\n", vpar->height);
         return false;
     }
 
@@ -116,7 +116,7 @@ int mediatools_validate_video(AVFormatContext *format)
 int mediatools_validate_duration(AVRational dur)
 {
     if (av_cmp_q(dur, t_0h) < 0 || av_cmp_q(dur, t_1h) > 0) {
-        printf("Bad duration (must be 0..1 hour)\n");
+        printf("Invalid duration (must be 0..1 hour)\n");
         return false;
     }
 
