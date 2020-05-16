@@ -30,6 +30,11 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    if (avformat_find_stream_info(format, NULL) < 0) {
+        printf("Couldn't read file \n");
+        return -1;
+    }
+
     if (!mediatools_validate_video(format)) {
         // Error is printed by validation function
         return -1;

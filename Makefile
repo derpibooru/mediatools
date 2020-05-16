@@ -1,5 +1,4 @@
 RM      := rm -f
-CC      := gcc
 CFLAGS  := -O3 -Wall -Isrc -I/usr/include/ffmpeg
 LIBS    := -lavformat -lavutil -lavcodec
 LDFLAGS :=

@@ -62,7 +62,7 @@ int mediatools_validate_video(AVFormatContext *format)
                 ;
             }
         }
-    } else if (strstr(iformat->name, "gif")) {
+    } else if (strcmp(iformat->name, "gif") == 0) {
         switch (vpar->codec_id) {
         default:
             printf("Bad video codec for GIF container (must be GIF)\n");
@@ -70,18 +70,43 @@ int mediatools_validate_video(AVFormatContext *format)
         case AV_CODEC_ID_GIF:
             ;
         }
+    } else if (strcmp(iformat->name, "image2") == 0) {
+        switch (vpar->codec_id) {
+        default:
+            printf("Bad video codec for image2 container (must be JPEG)\n");
+            return false;
+        case AV_CODEC_ID_MJPEG:
+            ;
+        }
+    } else if (strcmp(iformat->name, "png_pipe") == 0 || strcmp(iformat->name, "apng") == 0) {
+        switch (vpar->codec_id) {
+        default:
+            printf("Bad video codec for PNG container (must be PNG)\n");
+            return false;
+        case AV_CODEC_ID_PNG:
+        case AV_CODEC_ID_APNG:
+            ;
+        }
+    } else if (strcmp(iformat->name, "svg_pipe") == 0) {
+        switch (vpar->codec_id) {
+        default:
+            printf("Bad video codec for SVG container (must be SVG)\n");
+            return false;
+        case AV_CODEC_ID_SVG:
+            ;
+        }
     } else {
         printf("Unknown input format\n");
         return false;
     }
 
-    if (vpar->width < 2 || vpar->width > 4096) {
-        printf("Bad width %d (must be 2..4096)\n", vpar->width);
+    if (vpar->width < 1 || vpar->width > 4096) {
+        printf("Bad width %d (must be 1..4096)\n", vpar->width);
         return false;
     }
 
-    if (vpar->height < 2 || vpar->height > 4096) {
-        printf("Bad height %d (must be 2..4096)\n", vpar->height);
+    if (vpar->height < 1 || vpar->height > 4096) {
+        printf("Bad height %d (must be 1..4096)\n", vpar->height);
         return false;
     }
 
