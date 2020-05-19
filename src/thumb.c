@@ -73,7 +73,20 @@ int main(int argc, char *argv[])
             AVRational cur_time  = { pkt.pts, vstream->time_base.den };
             AVRational next_time = { pkt.pts + pkt.duration, vstream->time_base.den };
 
-            if (avcodec_send_packet(vctx, &pkt) != 0 || avcodec_receive_frame(vctx, frame) != 0) {
+            if (avcodec_send_packet(vctx, &pkt) != 0) {
+                // Decoder returned an error
+                printf("Couldn't read file\n");
+                return -1;
+            }
+
+            int ret = avcodec_receive_frame(vctx, frame);
+
+            if (ret == AVERROR(EAGAIN)) {
+                // Need more data, can't receive frame yet
+                continue;
+            }
+
+            if (ret != 0) {
                 // Decoder returned an error
                 printf("Couldn't read file\n");
                 return -1;
