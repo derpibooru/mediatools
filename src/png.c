@@ -2,6 +2,24 @@
 #include <libswscale/swscale.h>
 #include "png.h"
 
+enum AVPixelFormat pix_fmt(AVFrame *in_frame)
+{
+    // [swscaler @ 0x219f6c0]
+    // deprecated pixel format used, make sure you did set range correctly
+    switch (in_frame->format) {
+    case AV_PIX_FMT_YUVJ420P:
+        return AV_PIX_FMT_YUV420P;
+    case AV_PIX_FMT_YUVJ422P:
+        return AV_PIX_FMT_YUV422P;
+    case AV_PIX_FMT_YUVJ444P:
+        return AV_PIX_FMT_YUV444P;
+    case AV_PIX_FMT_YUVJ440P:
+        return AV_PIX_FMT_YUV440P;
+    default:
+        return in_frame->format;
+    }
+}
+
 int mediatools_write_frame_to_png(AVFrame *in_frame, const char *path)
 {
     struct SwsContext *sws_ctx = NULL;
@@ -64,7 +82,7 @@ int mediatools_write_frame_to_png(AVFrame *in_frame, const char *path)
 
     // Rewrite frame into correct color format
 
-    sws_ctx = sws_getContext(in_frame->width, in_frame->height, in_frame->format, out_frame->width, out_frame->height, AV_PIX_FMT_RGBA, SWS_LANCZOS, NULL, NULL, NULL);
+    sws_ctx = sws_getContext(in_frame->width, in_frame->height, pix_fmt(in_frame), out_frame->width, out_frame->height, AV_PIX_FMT_RGBA, SWS_LANCZOS, NULL, NULL, NULL);
     if (!sws_ctx)
         goto error;
 

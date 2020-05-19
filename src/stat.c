@@ -55,9 +55,6 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    // Best effort attempt to seek to beginning of file
-    av_seek_frame(format, -1, 0, AVSEEK_FLAG_BACKWARD);
-
     uint64_t frames = 0;
     int64_t last_pts = 0;
     int last_stream = 0;

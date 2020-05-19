@@ -65,8 +65,6 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    av_seek_frame(format, -1, 0, AVSEEK_FLAG_BACKWARD);
-
     // Loop until we get to the first video frame past the intended pts,
     // decoding all video frames along the way.
 
