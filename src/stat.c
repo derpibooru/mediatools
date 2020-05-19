@@ -7,6 +7,15 @@
 
 #include "validation.h"
 
+static int64_t start_time(AVStream *stream)
+{
+    if (stream->start_time == AV_NOPTS_VALUE) {
+        return 0;
+    }
+
+    return stream->start_time;
+}
+
 int main(int argc, char *argv[])
 {
     AVFormatContext *format = NULL;
@@ -67,8 +76,8 @@ int main(int argc, char *argv[])
         av_packet_unref(&pkt);
     }
 
-    AVRational tb  = format->streams[last_stream]->time_base;
-    AVRational dur = av_mul_q(av_make_q(last_pts, 1), tb);
+    AVStream *stream = format->streams[last_stream];
+    AVRational dur   = av_mul_q(av_make_q(last_pts - start_time(stream), 1), stream->time_base);
 
     if (!mediatools_validate_duration(dur))
         return -1;
