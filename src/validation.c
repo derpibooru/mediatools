@@ -28,6 +28,8 @@ static int validate_video_pixel_format(enum AVPixelFormat format)
     case AV_PIX_FMT_RGBA:
     case AV_PIX_FMT_RGB48LE:
     case AV_PIX_FMT_RGB48BE:
+    case AV_PIX_FMT_RGBA64LE:
+    case AV_PIX_FMT_RGBA64BE:
     case AV_PIX_FMT_YUVJ420P:
     case AV_PIX_FMT_YUVJ422P:
     case AV_PIX_FMT_YUVJ444P:
