@@ -15,15 +15,19 @@ static int validate_video_pixel_format(enum AVPixelFormat format)
     case AV_PIX_FMT_YA16:
     case AV_PIX_FMT_GRAY8:
     case AV_PIX_FMT_GRAY8A:
-    case AV_PIX_FMT_GRAY10:
-    case AV_PIX_FMT_GRAY12:
-    case AV_PIX_FMT_GRAY16:
+    case AV_PIX_FMT_GRAY10LE:
+    case AV_PIX_FMT_GRAY10BE:
+    case AV_PIX_FMT_GRAY12LE:
+    case AV_PIX_FMT_GRAY12BE:
+    case AV_PIX_FMT_GRAY16LE:
+    case AV_PIX_FMT_GRAY16BE:
     case AV_PIX_FMT_PAL8:
     case AV_PIX_FMT_RGB8:
     case AV_PIX_FMT_RGB24:
     case AV_PIX_FMT_RGB32:
-    case AV_PIX_FMT_RGB48:
     case AV_PIX_FMT_RGBA:
+    case AV_PIX_FMT_RGB48LE:
+    case AV_PIX_FMT_RGB48BE:
     case AV_PIX_FMT_YUVJ420P:
     case AV_PIX_FMT_YUVJ422P:
     case AV_PIX_FMT_YUVJ444P:
