@@ -8,10 +8,11 @@
 const AVRational t_1h = { 3600, 1 };
 const AVRational t_0h  = { 0, 1 };
 
-static int validate_video_pixel_format(enum AVPixelFormat format)
+static int validate_image_pixel_format(enum AVPixelFormat format)
 {
     switch (format) {
     // Still image formats
+    case AV_PIX_FMT_GBRAP:
     case AV_PIX_FMT_MONOBLACK:
     case AV_PIX_FMT_MONOWHITE:
     case AV_PIX_FMT_YA16LE:
@@ -40,7 +41,16 @@ static int validate_video_pixel_format(enum AVPixelFormat format)
     case AV_PIX_FMT_YUVA420P:
     case AV_PIX_FMT_YUVA422P:
     case AV_PIX_FMT_YUVA444P:
+        return true;
 
+    default:
+        return false;
+    }
+}
+
+static int validate_video_pixel_format(enum AVPixelFormat format)
+{
+    switch (format) {
     // Video frame formats
     case AV_PIX_FMT_YUV420P:
     case AV_PIX_FMT_YUV420P10LE:
@@ -88,21 +98,9 @@ int mediatools_validate_video(AVFormatContext *format)
         if (codecpar->codec_type == AVMEDIA_TYPE_VIDEO) {
             num_vstreams++;
             vstream_idx = i;
-
-            if (!validate_video_pixel_format(codecpar->format)) {
-                printf("Found unsupported pixel format %s\n", av_get_pix_fmt_name(codecpar->format));
-                return false;
-            }
-
         } else if (codecpar->codec_type == AVMEDIA_TYPE_AUDIO) {
             num_astreams++;
             astream_idx = i;
-
-            if (!validate_audio_sample_format(codecpar->format)) {
-                printf("Found unsupported audio sample format %s\n", av_get_sample_fmt_name(codecpar->format));
-                return false;
-            }
-
         } else if (codecpar->codec_type == AVMEDIA_TYPE_SUBTITLE) {
             // Allow subtitles
         } else {
@@ -138,6 +136,11 @@ int mediatools_validate_video(AVFormatContext *format)
             ;
         }
 
+        if (!validate_video_pixel_format(vpar->format)) {
+            printf("Found unsupported pixel format %s\n", av_get_pix_fmt_name(vpar->format));
+            return false;
+        }
+
         if (apar) {
             switch (apar->codec_id) {
             default:
@@ -146,6 +149,11 @@ int mediatools_validate_video(AVFormatContext *format)
             case AV_CODEC_ID_VORBIS:
             case AV_CODEC_ID_OPUS:
                 ;
+            }
+
+            if (!validate_audio_sample_format(apar->format)) {
+                printf("Found unsupported audio sample format %s\n", av_get_sample_fmt_name(apar->format));
+                return false;
             }
         }
     } else if (strcmp(iformat->name, "gif") == 0) {
@@ -156,6 +164,11 @@ int mediatools_validate_video(AVFormatContext *format)
         case AV_CODEC_ID_GIF:
             ;
         }
+
+        if (!validate_image_pixel_format(vpar->format)) {
+            printf("Found unsupported pixel format %s\n", av_get_pix_fmt_name(vpar->format));
+            return false;
+        }
     } else if (strcmp(iformat->name, "image2") == 0 || strcmp(iformat->name, "jpeg_pipe") == 0) {
         switch (vpar->codec_id) {
         default:
@@ -163,6 +176,11 @@ int mediatools_validate_video(AVFormatContext *format)
             return false;
         case AV_CODEC_ID_MJPEG:
             ;
+        }
+
+        if (!validate_image_pixel_format(vpar->format)) {
+            printf("Found unsupported pixel format %s\n", av_get_pix_fmt_name(vpar->format));
+            return false;
         }
     } else if (strcmp(iformat->name, "png_pipe") == 0 || strcmp(iformat->name, "apng") == 0) {
         switch (vpar->codec_id) {
@@ -172,6 +190,11 @@ int mediatools_validate_video(AVFormatContext *format)
         case AV_CODEC_ID_PNG:
         case AV_CODEC_ID_APNG:
             ;
+        }
+
+        if (!validate_image_pixel_format(vpar->format)) {
+            printf("Found unsupported pixel format %s\n", av_get_pix_fmt_name(vpar->format));
+            return false;
         }
     } else if (strcmp(iformat->name, "svg_pipe") == 0) {
         switch (vpar->codec_id) {
