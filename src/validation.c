@@ -12,6 +12,8 @@ static int validate_video_pixel_format(enum AVPixelFormat format)
 {
     switch (format) {
     // Still image formats
+    case AV_PIX_FMT_MONOBLACK:
+    case AV_PIX_FMT_MONOWHITE:
     case AV_PIX_FMT_YA16LE:
     case AV_PIX_FMT_YA16BE:
     case AV_PIX_FMT_GRAY8:
